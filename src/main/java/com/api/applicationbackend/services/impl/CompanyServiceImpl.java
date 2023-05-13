@@ -15,6 +15,7 @@ import java.util.stream.StreamSupport;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
+    @Autowired
     private CompanyRepository companyRepository;
 
     public CompanyServiceImpl() {
