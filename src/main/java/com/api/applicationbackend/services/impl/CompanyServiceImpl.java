@@ -33,8 +33,8 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void deleteCompany(String id) {
-        companyRepository.deleteById(Long.getLong(id));
+    public void deleteCompany(Long id) {
+        companyRepository.deleteById(id);
 
     }
 

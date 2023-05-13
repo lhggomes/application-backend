@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -30,6 +31,12 @@ public class CompanyController {
     @GetMapping
     public List<Company> getCompanies(){
         return companyService.getCompanies();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCompany(@PathVariable(value = "id") long id){
+        companyService.deleteCompany(id);
+        return new ResponseEntity<>("Company successfully deleted", HttpStatus.ACCEPTED);
     }
 
 }
