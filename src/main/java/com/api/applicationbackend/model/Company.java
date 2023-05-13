@@ -12,9 +12,10 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @CnpjCpf
+
     @Column(unique = true)
     @NotNull
+    @CnpjCpf
     private String cnpj;
     private String nomeFantasia;
     private String cep;

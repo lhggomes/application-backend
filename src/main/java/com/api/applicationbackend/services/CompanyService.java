@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CompanyService {
 
-    void createCompany(Company company);
+    Company createCompany(Company company);
 
     void updateCompany(String id, Company company);
 

@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 public class CnpjCpfValidator implements ConstraintValidator<CnpjCpf, String> {
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        return false;
+        return s == null || s.isEmpty() || isCpf(s) || isCnpj(s);
     }
 
     @Override
