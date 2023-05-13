@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @CnpjCpf
