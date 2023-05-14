@@ -1,9 +1,7 @@
 package com.api.applicationbackend.controllers;
 
 import com.api.applicationbackend.exceptions.RequiredFieldsNotFilled;
-import com.api.applicationbackend.model.Company;
 import com.api.applicationbackend.model.Supplier;
-import com.api.applicationbackend.services.impl.CompanyServiceImpl;
 import com.api.applicationbackend.services.impl.SupplierServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

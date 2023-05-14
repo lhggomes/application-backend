@@ -59,7 +59,6 @@ public class SupplierServiceImpl implements SupplierService {
             updateSupplier.setCep(supplier.getCep());
             updateSupplier.setEmail(supplier.getEmail());
             updateSupplier.setName(supplier.getName());
-            updateSupplier.setCpfCnpj(supplier.getCpfCnpj());
             updateSupplier.setRg(supplier.getRg());
             updateSupplier.setType(supplier.getType());
 
