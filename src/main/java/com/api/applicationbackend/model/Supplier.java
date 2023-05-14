@@ -1,14 +1,13 @@
 package com.api.applicationbackend.model;
 
 import com.api.applicationbackend.annotation.CnpjCpf;
+import com.api.applicationbackend.enums.RegType;
+import com.api.applicationbackend.exceptions.RequiredFieldsNotFilled;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Supplier {
@@ -29,6 +28,7 @@ public class Supplier {
 
     private Date birthDate;
     private String rg;
+    private RegType type;
 
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -40,7 +40,7 @@ public class Supplier {
     @JsonIgnore
     private Set<Company> companies = new HashSet<>();;
 
-    public Supplier() {
+    public Supplier()  {
     }
 
     public Long getId() {
@@ -105,5 +105,23 @@ public class Supplier {
 
     public void setRg(String rg) {
         this.rg = rg;
+    }
+
+    public RegType getType() {
+        return type;
+    }
+
+    public void setType(RegType type) {
+        this.type = type;
+    }
+
+    public void checkTypeOption() throws RequiredFieldsNotFilled {
+        if (this.type == RegType.FISICA){
+            if(this.birthDate == null || this.rg == null){
+                throw new RequiredFieldsNotFilled("Please provide the required fields");
+            }
+
+        }
+
     }
 }

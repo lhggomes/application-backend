@@ -1,5 +1,6 @@
 package com.api.applicationbackend.controllers;
 
+import com.api.applicationbackend.exceptions.RequiredFieldsNotFilled;
 import com.api.applicationbackend.model.Company;
 import com.api.applicationbackend.model.Supplier;
 import com.api.applicationbackend.services.impl.CompanyServiceImpl;
@@ -24,11 +25,15 @@ public class SupplierController {
     }
 
     @PostMapping("/company/{id}/supplier")
-    public ResponseEntity<Supplier> saveSupplier(@PathVariable(value = "id") Long companyId,
-                                                 @Validated @RequestBody Supplier supplier) {
+    public ResponseEntity<?> saveSupplier(@PathVariable(value = "id") Long companyId,
+                                          @Validated @RequestBody Supplier supplier) {
+        try {
+            Supplier createdSupplier = supplierService.createSupplier(supplier, companyId);
+            return new ResponseEntity<>(createdSupplier, HttpStatus.CREATED);
+        } catch (RequiredFieldsNotFilled requiredFieldsNotFilled) {
+            return new ResponseEntity<>(requiredFieldsNotFilled.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
-        Supplier createdSupplier = supplierService.createSupplier(supplier, companyId);
-        return new ResponseEntity<>(createdSupplier, HttpStatus.CREATED);
     }
 
     @GetMapping("/suppliers")

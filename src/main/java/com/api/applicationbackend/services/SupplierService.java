@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface SupplierService {
 
-    Supplier createSupplier(Supplier supplier, Long companyId);
+    Supplier createSupplier(Supplier supplier, Long companyId) throws Exception;
 
     void updateSupplier(String id, Supplier supplier);
 

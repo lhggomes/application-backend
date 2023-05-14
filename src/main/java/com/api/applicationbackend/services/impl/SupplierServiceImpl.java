@@ -1,5 +1,6 @@
 package com.api.applicationbackend.services.impl;
 
+import com.api.applicationbackend.exceptions.RequiredFieldsNotFilled;
 import com.api.applicationbackend.model.Supplier;
 import com.api.applicationbackend.repositories.CompanyRepository;
 import com.api.applicationbackend.repositories.SupplierRepository;
@@ -25,8 +26,9 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public Supplier createSupplier(Supplier supplier, Long companyId) {
+    public Supplier createSupplier(Supplier supplier, Long companyId) throws RequiredFieldsNotFilled {
 
+        supplier.checkTypeOption();
         Optional<Supplier> foundCompany = Optional.ofNullable(companyRepository.findById(companyId).map(company -> {
 
             Optional<Long> supplierId = Optional.ofNullable(supplier.getId());
