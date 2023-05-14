@@ -4,6 +4,9 @@ import com.api.applicationbackend.annotation.CnpjCpf;
 import jakarta.persistence.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Company {
@@ -19,6 +22,17 @@ public class Company {
     private String cnpj;
     private String nomeFantasia;
     private String cep;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "company_suppliers",
+            joinColumns = {@JoinColumn(name = "company_id")},
+            inverseJoinColumns = {@JoinColumn(name = "supplier_id")})
+    private Set<Supplier> suppliers = new HashSet<>();
+
 
     public Company() {
     }
@@ -53,5 +67,13 @@ public class Company {
 
     public void setCep(String cep) {
         this.cep = cep;
+    }
+
+    public Set<Supplier> getSuppliers() {
+        return suppliers;
+    }
+
+    public void setSuppliers(Set<Supplier> suppliers) {
+        this.suppliers = suppliers;
     }
 }
