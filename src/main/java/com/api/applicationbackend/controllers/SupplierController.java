@@ -41,6 +41,24 @@ public class SupplierController {
         return supplierService.getSuppliers();
     }
 
+    @GetMapping("/supplier/{id}")
+    public ResponseEntity<Supplier> getSupplier(@PathVariable(value = "id") Long id) {
+        Supplier supplier = supplierService.getSupplierById(id);
+        return new ResponseEntity<>(supplier, HttpStatus.OK);
+    }
+
+    @PutMapping("/supplier/{id}")
+    public ResponseEntity<String> updateSupplier(@PathVariable(value = "id") Long id,
+                                                 @Validated @RequestBody Supplier supplier) {
+        try {
+            supplierService.updateSupplier(id, supplier);
+            return new ResponseEntity<>("Updated successfully", HttpStatus.ACCEPTED);
+        } catch (RequiredFieldsNotFilled e) {
+            return new ResponseEntity<>("Please provide all required fields", HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
     @DeleteMapping("/supplier/{id}")
     public ResponseEntity<String> deleteCompany(@PathVariable(value = "id") long id) {
         supplierService.deleteSupplier(id);

@@ -1,7 +1,7 @@
 package com.api.applicationbackend.controllers;
 
 import com.api.applicationbackend.model.Company;
-import com.api.applicationbackend.services.impl.CEPServiceImpl;
+
 import com.api.applicationbackend.services.impl.CompanyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 @RestController
 @RequestMapping("/api/company")
@@ -45,7 +43,6 @@ public class CompanyController {
     public ResponseEntity<String> updateCompany(@Validated @RequestBody Company company,
                                                 @PathVariable(value = "id") long id) {
         companyService.updateCompany(id, company);
-
         return new ResponseEntity<>("Updated successfully", HttpStatus.ACCEPTED);
     }
 

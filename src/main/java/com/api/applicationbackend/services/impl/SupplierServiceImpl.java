@@ -50,8 +50,22 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public void updateSupplier(String id, Supplier supplier) {
-        supplierRepository.save(supplier);
+    public void updateSupplier(Long id, Supplier supplier) throws RequiredFieldsNotFilled {
+        supplier.checkTypeOption();
+        Optional<Supplier> foundSupplier = supplierRepository.findById(id);
+        foundSupplier.ifPresent(updateSupplier -> {
+
+            updateSupplier.setBirthDate(supplier.getBirthDate());
+            updateSupplier.setCep(supplier.getCep());
+            updateSupplier.setEmail(supplier.getEmail());
+            updateSupplier.setName(supplier.getName());
+            updateSupplier.setCpfCnpj(supplier.getCpfCnpj());
+            updateSupplier.setRg(supplier.getRg());
+            updateSupplier.setType(supplier.getType());
+
+            supplierRepository.save(updateSupplier);
+
+        });
     }
 
     @Override
@@ -70,6 +84,11 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier getSupplierById(Long id) {
+        Optional<Supplier> foundSupplier = supplierRepository.findById(id);
+        if (foundSupplier.isPresent()) {
+            return foundSupplier.get();
+        }
+
         return null;
     }
 }
