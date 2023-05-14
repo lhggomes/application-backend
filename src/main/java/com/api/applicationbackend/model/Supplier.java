@@ -1,8 +1,11 @@
 package com.api.applicationbackend.model;
 
+import com.api.applicationbackend.annotation.CnpjCpf;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,10 +17,19 @@ public class Supplier {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @CnpjCpf
+    @Column(unique = true)
     private String cpfCnpj;
+    @NotNull
     private String name;
+    @NotNull
     private String email;
+    @NotNull
     private String cep;
+
+    private Date birthDate;
+    private String rg;
+
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
@@ -77,5 +89,21 @@ public class Supplier {
 
     public void setCompanies(Set<Company> companies) {
         this.companies = companies;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
     }
 }

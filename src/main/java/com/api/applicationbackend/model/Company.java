@@ -20,7 +20,9 @@ public class Company {
     @NotNull
     @CnpjCpf
     private String cnpj;
+    @NotNull
     private String nomeFantasia;
+    @NotNull
     private String cep;
 
     @ManyToMany(fetch = FetchType.LAZY,

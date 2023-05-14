@@ -1,13 +1,11 @@
 package com.api.applicationbackend.services.impl;
 
-import com.api.applicationbackend.model.Company;
 import com.api.applicationbackend.model.Supplier;
 import com.api.applicationbackend.repositories.CompanyRepository;
 import com.api.applicationbackend.repositories.SupplierRepository;
 import com.api.applicationbackend.services.SupplierService;
 import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
