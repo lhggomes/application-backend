@@ -5,6 +5,7 @@ import com.api.applicationbackend.exceptions.BirthPRStateInvalidException;
 import com.api.applicationbackend.exceptions.RequiredFieldsNotFilledException;
 import com.api.applicationbackend.model.Address;
 import com.api.applicationbackend.model.Supplier;
+import com.api.applicationbackend.repositories.AddressRepository;
 import com.api.applicationbackend.repositories.CompanyRepository;
 import com.api.applicationbackend.repositories.SupplierRepository;
 import com.api.applicationbackend.services.SupplierService;
@@ -28,6 +29,9 @@ public class SupplierServiceImpl implements SupplierService {
     private CompanyRepository companyRepository;
 
     @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
     private CEPServiceImpl cepService;
 
     public SupplierServiceImpl() {
@@ -41,6 +45,7 @@ public class SupplierServiceImpl implements SupplierService {
         supplier.checkTypeOption();
         Address address = cepService.searchCEPAtBrazilianProvider(supplier.getCep());
         validateSupplierSettings(address, supplier);
+        addressRepository.save(address);
 
         supplier.setAddress(address);
         Optional<Supplier> foundSupplier = Optional.ofNullable(companyRepository.findById(companyId).map(company -> {
@@ -107,7 +112,7 @@ public class SupplierServiceImpl implements SupplierService {
 
     private void validateSupplierSettings(Address address, Supplier supplier) throws BirthPRStateInvalidException {
 
-        if (supplier.getType() == PersonTypeEnum.FISICA && address.getUf() == "PR") {
+        if (supplier.getType() == PersonTypeEnum.FISICA && address.getUf().equalsIgnoreCase("PR")) {
 
             Calendar birthCalendar = Calendar.getInstance();
             Calendar today = Calendar.getInstance();
