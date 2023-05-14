@@ -8,11 +8,13 @@ public interface CompanyService {
 
     Company createCompany(Company company);
 
-    void updateCompany(String id, Company company);
+    void updateCompany(Long id, Company company);
 
     void deleteCompany(Long id);
 
     List<Company> getCompanies();
+
+    Company getCompanyByID(Long id);
 
 
 }

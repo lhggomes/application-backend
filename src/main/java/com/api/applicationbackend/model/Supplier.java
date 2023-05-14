@@ -1,7 +1,7 @@
 package com.api.applicationbackend.model;
 
 import com.api.applicationbackend.annotation.CnpjCpf;
-import com.api.applicationbackend.enums.RegType;
+import com.api.applicationbackend.enums.PersonTypeEnum;
 import com.api.applicationbackend.exceptions.RequiredFieldsNotFilled;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -28,7 +28,7 @@ public class Supplier {
 
     private Date birthDate;
     private String rg;
-    private RegType type;
+    private PersonTypeEnum type;
 
 
     @ManyToMany(fetch = FetchType.LAZY,
@@ -107,16 +107,16 @@ public class Supplier {
         this.rg = rg;
     }
 
-    public RegType getType() {
+    public PersonTypeEnum getType() {
         return type;
     }
 
-    public void setType(RegType type) {
+    public void setType(PersonTypeEnum type) {
         this.type = type;
     }
 
     public void checkTypeOption() throws RequiredFieldsNotFilled {
-        if (this.type == RegType.FISICA){
+        if (this.type == PersonTypeEnum.FISICA){
             if(this.birthDate == null || this.rg == null){
                 throw new RequiredFieldsNotFilled("Please provide the required fields");
             }

@@ -1,6 +1,6 @@
 package com.api.applicationbackend.enums;
 
-public enum RegType {
+public enum PersonTypeEnum {
 
     FISICA,
     JURIDICA;
