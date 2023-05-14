@@ -1,7 +1,9 @@
 package com.api.applicationbackend.services;
 
+import com.api.applicationbackend.model.Address;
+
 public interface CEPService {
 
-    String checkCEPAPI(String cep);
+    Address searchCEPAtBrazilianProvider(String cep);
 
 }

@@ -1,6 +1,9 @@
 package com.api.applicationbackend.services.impl;
 
-import com.api.applicationbackend.exceptions.RequiredFieldsNotFilled;
+import com.api.applicationbackend.enums.PersonTypeEnum;
+import com.api.applicationbackend.exceptions.BirthPRStateInvalidException;
+import com.api.applicationbackend.exceptions.RequiredFieldsNotFilledException;
+import com.api.applicationbackend.model.Address;
 import com.api.applicationbackend.model.Supplier;
 import com.api.applicationbackend.repositories.CompanyRepository;
 import com.api.applicationbackend.repositories.SupplierRepository;
@@ -9,6 +12,8 @@ import org.hibernate.sql.exec.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,14 +27,23 @@ public class SupplierServiceImpl implements SupplierService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private CEPServiceImpl cepService;
+
     public SupplierServiceImpl() {
     }
 
     @Override
-    public Supplier createSupplier(Supplier supplier, Long companyId) throws RequiredFieldsNotFilled {
+    public Supplier createSupplier(Supplier supplier, Long companyId) throws RequiredFieldsNotFilledException,
+            BirthPRStateInvalidException {
 
+        // Checking the required fields
         supplier.checkTypeOption();
-        Optional<Supplier> foundCompany = Optional.ofNullable(companyRepository.findById(companyId).map(company -> {
+        Address address = cepService.searchCEPAtBrazilianProvider(supplier.getCep());
+        validateSupplierSettings(address, supplier);
+
+        supplier.setAddress(address);
+        Optional<Supplier> foundSupplier = Optional.ofNullable(companyRepository.findById(companyId).map(company -> {
 
             Optional<Long> supplierId = Optional.ofNullable(supplier.getId());
 
@@ -46,11 +60,11 @@ public class SupplierServiceImpl implements SupplierService {
             return supplierRepository.save(supplier);
         }).orElseThrow(() -> new ExecutionException("Resource not found")));
 
-        return foundCompany.get();
+        return foundSupplier.get();
     }
 
     @Override
-    public void updateSupplier(Long id, Supplier supplier) throws RequiredFieldsNotFilled {
+    public void updateSupplier(Long id, Supplier supplier) throws RequiredFieldsNotFilledException {
         supplier.checkTypeOption();
         Optional<Supplier> foundSupplier = supplierRepository.findById(id);
         foundSupplier.ifPresent(updateSupplier -> {
@@ -89,5 +103,28 @@ public class SupplierServiceImpl implements SupplierService {
         }
 
         return null;
+    }
+
+    private void validateSupplierSettings(Address address, Supplier supplier) throws BirthPRStateInvalidException {
+
+        if (supplier.getType() == PersonTypeEnum.FISICA && address.getUf() == "PR") {
+
+            Calendar birthCalendar = Calendar.getInstance();
+            Calendar today = Calendar.getInstance();
+
+            birthCalendar.setTime(supplier.getBirthDate());
+            int age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR);
+
+            birthCalendar.add(Calendar.YEAR, age);
+            if (today.before(birthCalendar)) {
+                age--;
+            }
+
+            if (age < 18) {
+                throw new BirthPRStateInvalidException("Person is not legal allowed!");
+            }
+
+        }
+
     }
 }

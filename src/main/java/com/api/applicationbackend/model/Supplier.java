@@ -2,7 +2,7 @@ package com.api.applicationbackend.model;
 
 import com.api.applicationbackend.annotation.CnpjCpf;
 import com.api.applicationbackend.enums.PersonTypeEnum;
-import com.api.applicationbackend.exceptions.RequiredFieldsNotFilled;
+import com.api.applicationbackend.exceptions.RequiredFieldsNotFilledException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -13,7 +13,7 @@ import java.util.*;
 public class Supplier {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CnpjCpf
@@ -39,6 +39,9 @@ public class Supplier {
             mappedBy = "suppliers")
     @JsonIgnore
     private Set<Company> companies = new HashSet<>();;
+
+    @OneToOne
+    private Address address;
 
     public Supplier()  {
     }
@@ -115,10 +118,18 @@ public class Supplier {
         this.type = type;
     }
 
-    public void checkTypeOption() throws RequiredFieldsNotFilled {
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public void checkTypeOption() throws RequiredFieldsNotFilledException {
         if (this.type == PersonTypeEnum.FISICA){
             if(this.birthDate == null || this.rg == null){
-                throw new RequiredFieldsNotFilled("Please provide the required fields");
+                throw new RequiredFieldsNotFilledException("Please provide the required fields");
             }
 
         }

@@ -1,6 +1,8 @@
 package com.api.applicationbackend.services.impl;
 
+import com.api.applicationbackend.model.Address;
 import com.api.applicationbackend.model.Company;
+import com.api.applicationbackend.repositories.AddressRepository;
 import com.api.applicationbackend.repositories.CompanyRepository;
 import com.api.applicationbackend.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,21 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private CEPServiceImpl cepService;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
     public CompanyServiceImpl() {
     }
 
     @Override
     public Company createCompany(Company company) {
+
+        Address address = cepService.searchCEPAtBrazilianProvider(company.getCep());
+        company.setAddress(address);
+        addressRepository.save(address);
         return companyRepository.save(company);
 
     }

@@ -1,6 +1,7 @@
 package com.api.applicationbackend.controllers;
 
-import com.api.applicationbackend.exceptions.RequiredFieldsNotFilled;
+import com.api.applicationbackend.exceptions.BirthPRStateInvalidException;
+import com.api.applicationbackend.exceptions.RequiredFieldsNotFilledException;
 import com.api.applicationbackend.model.Supplier;
 import com.api.applicationbackend.services.impl.SupplierServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,10 @@ public class SupplierController {
         try {
             Supplier createdSupplier = supplierService.createSupplier(supplier, companyId);
             return new ResponseEntity<>(createdSupplier, HttpStatus.CREATED);
-        } catch (RequiredFieldsNotFilled requiredFieldsNotFilled) {
+        } catch (RequiredFieldsNotFilledException requiredFieldsNotFilled) {
             return new ResponseEntity<>(requiredFieldsNotFilled.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (BirthPRStateInvalidException birthPRStateInvalidException) {
+            return new ResponseEntity<>(birthPRStateInvalidException.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -51,7 +54,7 @@ public class SupplierController {
         try {
             supplierService.updateSupplier(id, supplier);
             return new ResponseEntity<>("Updated successfully", HttpStatus.ACCEPTED);
-        } catch (RequiredFieldsNotFilled e) {
+        } catch (RequiredFieldsNotFilledException e) {
             return new ResponseEntity<>("Please provide all required fields", HttpStatus.BAD_REQUEST);
         }
 

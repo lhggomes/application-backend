@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
@@ -34,6 +35,8 @@ public class Company {
             inverseJoinColumns = {@JoinColumn(name = "supplier_id")})
     private Set<Supplier> suppliers = new HashSet<>();
 
+    @OneToOne
+    private Address address;
 
     public Company() {
     }
@@ -76,5 +79,13 @@ public class Company {
 
     public void setSuppliers(Set<Supplier> suppliers) {
         this.suppliers = suppliers;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
