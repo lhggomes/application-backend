@@ -1,5 +1,5 @@
 FROM openjdk:19
-LABEL authors="lucasgomes"
+LABEL authors="lucas.henrique.s.go@gmail.com"
 
 VOLUME /tmp
 EXPOSE 8080
